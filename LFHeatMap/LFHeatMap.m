@@ -1,5 +1,9 @@
 #import "LFHeatMap.h"
 
+@interface LFHeatMap ()
+@property CLLocationCoordinate2D center;
+@property MKMapRect boundingRect;
+@end
 
 @implementation LFHeatMap
 
@@ -445,6 +449,53 @@ inline static int isqrt(int x)
     
     return image;
 }
+
+- (void)setPointData:(NSDictionary *)pointData
+{
+    _pointData = pointData;
+    _currentHeatMapImage = nil;
+    
+    MKMapPoint upperLeftPoint, lowerRightPoint;
+    for (CLLocation *location in [_pointData allKeys]) {
+        MKMapPoint point =  MKMapPointForCoordinate(location.coordinate);
+        
+        if (point.x < upperLeftPoint.x) upperLeftPoint.x = point.x;
+        if (point.y < upperLeftPoint.y) upperLeftPoint.y = point.y;
+        if (point.x > lowerRightPoint.x) lowerRightPoint.x = point.x;
+        if (point.y > lowerRightPoint.y) lowerRightPoint.y = point.y;
+        double width = lowerRightPoint.x - upperLeftPoint.x;
+        double height = lowerRightPoint.y - upperLeftPoint.y;
+        
+        self.boundingRect = MKMapRectMake(upperLeftPoint.x, upperLeftPoint.y, width, height);
+        self.center = MKCoordinateForMapPoint(MKMapPointMake(upperLeftPoint.x + width / 2, upperLeftPoint.y + height / 2));
+    }
+}
+
+- (UIImage *)currentHeatMapImage
+{
+    if (!_currentHeatMapImage) {
+        _currentHeatMapImage = [LFHeatMap heatMapForMapView:self.mapView
+                                                      boost:0.4
+                                                  locations:[_pointData allKeys]
+                                                    weights:[_pointData allValues]];
+        self.imageRect = self.mapView.visibleMapRect;
+    }
+    
+    return _currentHeatMapImage;
+}
+
+
+#pragma mark - MKOverlay
+- (CLLocationCoordinate2D)coordinate
+{
+    return self.center;
+}
+
+- (MKMapRect)boundingMapRect
+{
+    return self.boundingRect;
+}
+
 
 @end
 

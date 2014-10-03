@@ -9,8 +9,9 @@
 #import "LFHeadMapDemoViewController.h"
 #import <MapKit/MapKit.h>
 #import "LFHeatMap.h"
+#import "LFHeatMapView.h"
 
-@interface LFHeadMapDemoViewController ()
+@interface LFHeadMapDemoViewController () <MKMapViewDelegate>
 
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, weak) IBOutlet UISlider *slider;
@@ -18,6 +19,8 @@
 @property (nonatomic) UIImageView *imageView;
 @property (nonatomic) NSMutableArray *locations;
 @property (nonatomic) NSMutableArray *weights;
+
+@property (strong, nonatomic) LFHeatMap *heatMap;
 
 @end
 
@@ -38,6 +41,7 @@ static NSString *const kMagnitude = @"magnitude";
     
     self.locations = [[NSMutableArray alloc] initWithCapacity:[quakeData count]];
     self.weights = [[NSMutableArray alloc] initWithCapacity:[quakeData count]];
+    NSMutableDictionary *pointData = [NSMutableDictionary new];
     for (NSDictionary *reading in quakeData)
     {
         CLLocationDegrees latitude = [[reading objectForKey:kLatitude] doubleValue];
@@ -46,8 +50,8 @@ static NSString *const kMagnitude = @"magnitude";
         
         CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
         [self.locations addObject:location];
-        
         [self.weights addObject:[NSNumber numberWithInteger:(magnitude * 10)]];
+        pointData[location] = @(magnitude * 10);
     }
     
     // set map region
@@ -57,8 +61,14 @@ static NSString *const kMagnitude = @"magnitude";
     
     // create overlay view for the heatmap image
     self.imageView = [[UIImageView alloc] initWithFrame:_mapView.frame];
+    self.imageView.alpha = 0.5;
     self.imageView.contentMode = UIViewContentModeCenter;
     [self.view addSubview:self.imageView];
+    
+    self.heatMap = [LFHeatMap new];
+    self.heatMap.mapView = self.mapView;
+    self.heatMap.pointData = pointData;
+    [self.mapView addOverlay:self.heatMap];
     
     // show initial heat map
     [self sliderChanged:self.slider];
@@ -69,6 +79,31 @@ static NSString *const kMagnitude = @"magnitude";
     float boost = slider.value;
     UIImage *heatmap = [LFHeatMap heatMapForMapView:self.mapView boost:boost locations:self.locations weights:self.weights];
     self.imageView.image = heatmap;
+}
+
+#pragma mark -
+#pragma mark MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    if (!self.heatMap) {
+        return;
+    }
+    
+    self.heatMap.currentHeatMapImage = nil;
+    [self.mapView removeOverlay:self.heatMap];
+    [self.mapView addOverlay:self.heatMap];
+    
+    self.imageView.image = self.heatMap.currentHeatMapImage;
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    LFHeatMapView *ret = [[LFHeatMapView alloc] initWithOverlay:overlay];
+    return ret;
 }
 
 @end

@@ -1,9 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface LFHeatMap : NSObject
-{    
-}
+@interface LFHeatMap : NSObject <MKOverlay>
 
 /**
  Generates a heat map image for the specified map view.
@@ -69,6 +67,14 @@
     weightsAdjustmentEnabled:(BOOL)weightsAdjustmentEnabled
              groupingEnabled:(BOOL)groupingEnabled;
 
+@property (strong, nonatomic) NSDictionary *pointData;
+@property (strong, nonatomic) UIImage *currentHeatMapImage;
+@property (strong, nonatomic) MKMapView *mapView;
+@property (nonatomic) MKMapRect imageRect;
+
+#pragma mark - MKOverlay
+- (MKMapRect)boundingMapRect;
+@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 
 @end
 
