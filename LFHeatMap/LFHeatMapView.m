@@ -26,7 +26,6 @@
                                  widthScale * source.size.width,
                                  heightScale * source.size.height);
 
-    //    NSLog(@"%s\nmapRect:%@\nimageRect:%@\ncropRect:%@\nrectForMapRect:%@\n\n", __PRETTY_FUNCTION__, MKStringFromMapRect(mapRect), MKStringFromMapRect(heatMap.imageRect), NSStringFromCGRect(cropRect), NSStringFromCGRect( [self rectForMapRect:mapRect]));
     CGImageRef imageRef = CGImageCreateWithImageInRect([source CGImage], cropRect);
     UIImage *cropped = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
@@ -54,14 +53,12 @@
             CGFloat yPerc = (cropRect.origin.y + cropRect.size.height - source.size.height) / source.size.height;
             targetRect.size.height -= yPerc * targetRect.size.height;
         }
-        
-        NSLog(@"%s wtf not equal\ntarget:%@\nactual:%@\n\n", __PRETTY_FUNCTION__, NSStringFromCGRect(cropRect), NSStringFromCGSize(cropped.size));
     }
     
     UIGraphicsPushContext(context);
     [cropped drawInRect:targetRect];
     UIGraphicsPopContext();
-    
+
 }
 
 @end

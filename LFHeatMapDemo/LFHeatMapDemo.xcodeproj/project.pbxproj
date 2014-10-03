@@ -20,7 +20,6 @@
 		4EBFBA5E19799E3C00EB178F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBFBA5D19799E3C00EB178F /* MapKit.framework */; };
 		4EBFBA601979A2DC00EB178F /* quake.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EBFBA5F1979A2DC00EB178F /* quake.plist */; };
 		ED0088D219DEFB9B008921E2 /* LFHeatMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED0088D119DEFB9B008921E2 /* LFHeatMapView.m */; };
-		ED0088D519DF2937008921E2 /* UIImage+Resizing.m in Sources */ = {isa = PBXBuildFile; fileRef = ED0088D419DF2937008921E2 /* UIImage+Resizing.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,8 +44,6 @@
 		4EBFBA5F1979A2DC00EB178F /* quake.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = quake.plist; sourceTree = "<group>"; };
 		ED0088D019DEFB9B008921E2 /* LFHeatMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFHeatMapView.h; sourceTree = "<group>"; };
 		ED0088D119DEFB9B008921E2 /* LFHeatMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFHeatMapView.m; sourceTree = "<group>"; };
-		ED0088D319DF2937008921E2 /* UIImage+Resizing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resizing.h"; sourceTree = "<group>"; };
-		ED0088D419DF2937008921E2 /* UIImage+Resizing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resizing.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,8 +124,6 @@
 				4EBFBA531979825400EB178F /* LFHeatMap.m */,
 				ED0088D019DEFB9B008921E2 /* LFHeatMapView.h */,
 				ED0088D119DEFB9B008921E2 /* LFHeatMapView.m */,
-				ED0088D319DF2937008921E2 /* UIImage+Resizing.h */,
-				ED0088D419DF2937008921E2 /* UIImage+Resizing.m */,
 			);
 			name = LFHeatMap;
 			path = ../LFHeatMap;
@@ -199,7 +194,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED0088D519DF2937008921E2 /* UIImage+Resizing.m in Sources */,
 				4EBFBA331979813800EB178F /* AppDelegate.m in Sources */,
 				4EBFBA541979825400EB178F /* LFHeatMap.m in Sources */,
 				ED0088D219DEFB9B008921E2 /* LFHeatMapView.m in Sources */,
